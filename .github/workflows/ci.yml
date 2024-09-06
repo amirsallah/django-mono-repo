@@ -1,0 +1,72 @@
+name: CI for Django Monorepo
+
+on:
+  pull_request:
+    paths:
+      - 'service1/**'
+      - 'service2/**'
+      - 'shared/**'
+
+jobs:
+  check-service1:
+    if: github.event.pull_request.head.repo.full_name == 'owner/repo' && (github.event_name == 'pull_request' && contains(github.event.pull_request.changed_files, 'service1/'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          cd service1
+          poetry install
+      - name: Run tests
+        run: |
+          cd service1
+          poetry run pytest
+
+  check-service2:
+    if: github.event.pull_request.head.repo.full_name == 'owner/repo' && (github.event_name == 'pull_request' && contains(github.event.pull_request.changed_files, 'service2/'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          cd service2
+          poetry install
+      - name: Run tests
+        run: |
+          cd service2
+          poetry run pytest
+
+  check-shared:
+    if: github.event.pull_request.head.repo.full_name == 'owner/repo' && (github.event_name == 'pull_request' && contains(github.event.pull_request.changed_files, 'shared/'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies for service1
+        run: |
+          cd service1
+          poetry install
+      - name: Run tests for service1
+        run: |
+          cd service1
+          poetry run pytest
+      - name: Install dependencies for service2
+        run: |
+          cd service2
+          poetry install
+      - name: Run tests for service2
+        run: |
+          cd service2
+          poetry run pytest
+

@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "django-monorepo"
+version = "0.1.0"
+description = "test"
+authors = ["amirsallah"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^3.2"
+djangorestframework = "^3.12"
+
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+#[tool.poetry.workspace]
+#members = ["service1", "service2"]
